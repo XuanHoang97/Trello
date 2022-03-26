@@ -1,0 +1,14 @@
+.item-column{
+    background: rgb(231, 231, 231);
+    padding: 10px 15px;
+    height: calc(100vh - 40px);
+    overflow-y: scroll;
+    border-radius: 15px;
+    .list-task{
+        list-style-type: none;
+        padding: 0;
+    }
+}
+.item-column::-webkit-scrollbar{
+    -webkit-appearance: scrollbargripper-vertical;
+}
