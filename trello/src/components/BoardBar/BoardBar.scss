@@ -1,5 +1,11 @@
+@import '../variable.scss';
+
 .navbar-board{
-    background: rgb(123, 113, 255);
-    padding: 10px 15px;
+    padding-left: $gap;
+    display: flex;
+    align-items: center;
+    
+    font-size: 15px;
+    background: $navbar-board-bg-color;
     color: white;
 }

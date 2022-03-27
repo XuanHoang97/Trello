@@ -1,8 +1,26 @@
+@import '../variable.scss';
+
 .board-columns{
-    background: rgb(123, 113, 255);
-    display: grid;
-    grid-template-columns: repeat(4,1fr);
-    gap: 15px;
-    padding: 10px 15px;
-    overflow-x: scroll;
+    display: flex;
+    gap: $gap;
+    overflow-x: auto;
+
+    &::-webkit-scrollbar{
+        -webkit-appearance: none;
+    }
+
+    &::-webkit-scrollbar:horizontal{
+        height: 10px;;
+    }
+
+    &::-webkit-scrollbar-thumb{
+        background: rgba(255, 255, 255, 0.24) ;
+        border-radius: 5px solid $list-bg-color;
+    }
+
+    .column-drop-preview{
+        border: 1px solid rgb(202, 202, 202);
+        margin: 5px
+    }
 }
+

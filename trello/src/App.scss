@@ -1,0 +1,17 @@
+@import "./components/variable.scss";
+
+img {
+  width: 100%;
+}
+
+body {
+  line-height: 1.3em;
+  font-size: 14px;
+}
+
+.trello-master {
+  height: 100vh;
+  display: grid;
+  grid-template-rows: 40px 50px 1fr;
+  background: $navbar-board-bg-color;
+}

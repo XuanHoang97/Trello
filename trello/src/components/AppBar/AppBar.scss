@@ -1,5 +1,11 @@
+@import '../variable.scss';
+
 .navbar-app{
-    background: rgb(79, 76, 255);
-    padding: 10px 15px;
+    padding-left: $gap;
+    display: flex;
+    align-items: center;
+    
+    font-size: 1.5em;
+    background: $navbar-app-bg-color;
     color: white;
 }
