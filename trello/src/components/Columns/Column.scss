@@ -30,6 +30,30 @@
     border-bottom-right-radius: $column-border-radius;
   }
 
+  .column-drag-handle{
+    display: flex;
+    .column-title{
+      width: 88%;
+    }
+
+    .column-dropdown{
+      width: 10%;
+      z-index: 1000 !important;
+
+      .dropdown-toggle{
+        &::after{
+          content: '...';
+          border: none !important;
+          outline: none !important;
+          box-shadow: none !important;
+        }
+        &:hover{
+          background: lightblue;
+        }
+      }
+    }
+  }
+
   .card-list {
     list-style-type: none;
     margin: 0;

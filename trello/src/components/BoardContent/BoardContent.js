@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { DATA_FAKE } from '../../actions/DataFake';
 import { mapOrder } from '../../ultil/sort';
 import Column from '../Columns/Column';
@@ -6,10 +6,14 @@ import { Container, Draggable } from "react-smooth-dnd";
 import { applyDrag } from '../../ultil/dragDrop';
 import './BoardContent.scss';
 import _ from 'lodash';
+import {v4 as uuidv4} from 'uuid';
 
 function BoardContent(props) {
     const [board, setBoard] = useState({});
     const [columns, setColumns] = useState([]);
+    const [isShowAddList, setIsShowAddList] = useState(false);
+    const [valueInput, setValueInput] = useState('');
+    const inputRef = useRef(null);
 
     useEffect(() => {
         const boardInitData = DATA_FAKE.boards.find(item => item.id === 'board1');
@@ -19,9 +23,17 @@ function BoardContent(props) {
         }
     }, []);
 
+
+    useEffect(() => {
+        if(isShowAddList === true && inputRef && inputRef.current) {
+            inputRef.current.focus();
+        }
+    }, [isShowAddList]);
+
     if(_.isEmpty(board)) {
         return 'board not found';
     }
+
 
     const onColumnDrop = (dropResult) => {
         let newColumns = [...columns];
@@ -44,6 +56,26 @@ function BoardContent(props) {
 
             setColumns(newColumns);
         }
+    }
+
+    const handleAddList = () => {
+        if(!valueInput) {
+            if(inputRef && inputRef.current)
+                inputRef.current.focus();
+            return;
+        }
+
+        //update board columns
+        const _columns = _.cloneDeep(columns);
+        _columns.push({
+            id: uuidv4(),
+            boardId: board.id,
+            title: valueInput,
+            cards: [],
+        });
+        setColumns(_columns);
+        setValueInput('');
+        inputRef.current.focus();
     }
 
     return (
@@ -72,10 +104,30 @@ function BoardContent(props) {
                     })
                 }
 
-                <div className='add-new-column ml-2'>
-                    <button type="button" className="btn btn-light"> <i className='fa fa-plus'></i> Add another column</button>
-                </div>
+                <div className='addTask'>
+                    {
+                        !isShowAddList ?
+                        <div className='add-new-column'>
+                            <button onClick={()=> setIsShowAddList(true)} type="button" className="btn btn-light"> <i className='fa fa-plus'></i> Add another column</button>
+                        </div>
+                        :
+                        <div className='content-add-column pt-2'>
+                            <div className="form-group">
+                                <input type="text" className="form-control" placeholder="" ref={inputRef} 
+                                    value={valueInput}
+                                    onChange={(e)=> setValueInput(e.target.value)}
+                                />
+                            </div>
 
+                            <div>
+                                <button onClick={()=> handleAddList()} type="button" className="btn btn-success mr-4">Add</button>
+                                <i onClick={()=> setIsShowAddList(false)} className='fa fa-times'></i>
+                            </div>
+                        </div>
+
+                    }
+
+                </div>
             </Container>
         </div>
     );
