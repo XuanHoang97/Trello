@@ -1,10 +1,9 @@
-import React from 'react';
+import { MODAL_ACTION_CLOSE, MODAL_ACTION_CONFIRM } from '../../ultil/constant';
 import { Button, Modal } from 'react-bootstrap';
 import parse from 'html-react-parser';
-import { MODAL_ACTION_CLOSE, MODAL_ACTION_CONFIRM } from '../../ultil/constant';
+import React from 'react';
 
 const ConfirmModal = (props) => {
-
     const {title, content, show, onAction} = props;
 
     return (

@@ -14,4 +14,13 @@ body {
   display: grid;
   grid-template-rows: 40px 50px 1fr;
   background: $navbar-board-bg-color;
+  .customize-input-column{
+    cursor: pointer;
+    border: none;
+    &:focus{
+      outline: none !important;
+      box-shadow: none !important;
+    }
+    background: inherit;
+  }
 }

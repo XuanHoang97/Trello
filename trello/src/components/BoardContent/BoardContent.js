@@ -1,12 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { Container, Draggable } from "react-smooth-dnd";
 import { DATA_FAKE } from '../../actions/DataFake';
+import { applyDrag } from '../../ultil/dragDrop';
 import { mapOrder } from '../../ultil/sort';
 import Column from '../Columns/Column';
-import { Container, Draggable } from "react-smooth-dnd";
-import { applyDrag } from '../../ultil/dragDrop';
+import {v4 as uuidv4} from 'uuid';
 import './BoardContent.scss';
 import _ from 'lodash';
-import {v4 as uuidv4} from 'uuid';
 
 function BoardContent(props) {
     const [board, setBoard] = useState({});
@@ -78,6 +78,22 @@ function BoardContent(props) {
         inputRef.current.focus();
     }
 
+    const onUpdateColumn = (newColumn) => {
+        const columnIdUpdate = newColumn.id;
+        let ncols = [...columns];  // original columns
+        let index = ncols.findIndex(col => col.id === columnIdUpdate);
+        if(newColumn._destroy) {
+            // remove column
+            ncols.splice(index, 1);
+        }else{
+            // update title
+            ncols[index] = newColumn;
+        }
+        setColumns(ncols);
+    }
+
+    console.log('columns', columns);
+
     return (
         <div className="board-columns">
             <Container
@@ -98,6 +114,7 @@ function BoardContent(props) {
                                 <Column 
                                     column={column} 
                                     onCardDrop={onCardDrop}
+                                    onUpdateColumn={onUpdateColumn}
                                 />
                             </Draggable>
                         )

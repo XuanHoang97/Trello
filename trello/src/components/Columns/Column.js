@@ -1,18 +1,27 @@
+import { MODAL_ACTION_CLOSE, MODAL_ACTION_CONFIRM } from '../../ultil/constant';
+import React, { useEffect, useRef, useState } from 'react';
+import { Container, Draggable } from "react-smooth-dnd";
+import ConfirmModal from '../common/ConfirmModal';
+import {Dropdown, Form} from 'react-bootstrap';
 import { mapOrder } from '../../ultil/sort';
 import Card from '../Card/Card';
-import React from 'react';
 import './Column.scss';
-import { Container, Draggable } from "react-smooth-dnd";
-import {Dropdown, Form} from 'react-bootstrap';
-import ConfirmModal from '../common/ConfirmModal';
-import { MODAL_ACTION_CLOSE, MODAL_ACTION_CONFIRM } from '../../ultil/constant';
 
 
 function Column(props) {
-    const {column, onCardDrop} = props;
+    const {column, onCardDrop, onUpdateColumn} = props;
     const cards = mapOrder(column.cards, column.cardOrder, 'id');
 
-    const [showDelete, setShowDelete] = React.useState(false);
+    const [showDelete, setShowDelete] = useState(false);
+    const [titleColumn, setTitleColumn] = useState('');
+    const [isFirstClick, setIsFirstClick] = useState(true);
+    const inputRef = useRef(null);
+
+    useEffect(() => {
+        if(column && column.title) {
+            setTitleColumn(column.title);
+        }
+    }, [column]);
 
     const toggleModal = () => {
         setShowDelete(!showDelete);
@@ -26,9 +35,35 @@ function Column(props) {
 
         if(type === MODAL_ACTION_CONFIRM) {
             // do something
+            const newColumn = {
+                ...column,
+                _destroy: true
+            }
+            onUpdateColumn(newColumn);
         }
 
         toggleModal();
+    }
+
+    const selectAllText = (event) => {
+        setIsFirstClick(false);
+        if(isFirstClick) {
+            event.target.select();
+        }else{
+            inputRef.current.setSelectionRange(titleColumn.length, titleColumn.length);
+        }
+        // event.target.focus();
+
+    }
+
+    const handleclickOutSide = (event) => {
+        setIsFirstClick(true);
+        const newColumn = {
+            ...column,
+            title: titleColumn,
+            _destroy: false
+        }
+        onUpdateColumn(newColumn);
     }
 
     return (
@@ -37,7 +72,18 @@ function Column(props) {
 
                 <header className='column-drag-handle'>
                     <div className=' column-title'>
-                        {column.title}
+                        <Form.Control
+                            type="text"
+                            size="sm"
+                            value={titleColumn}
+                            className='customize-input-column'
+                            onClick = {selectAllText}
+                            onChange = {(e)=>setTitleColumn(e.target.value)}
+                            spellCheck="false"
+                            onBlur={handleclickOutSide}
+                            onMouseDown={(e)=>e.preventDefault()}
+                            ref={inputRef}
+                        />
                     </div>
 
                     <div className='column-dropdown'>
