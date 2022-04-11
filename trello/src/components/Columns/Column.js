@@ -6,6 +6,7 @@ import {Dropdown, Form} from 'react-bootstrap';
 import { mapOrder } from '../../ultil/sort';
 import Card from '../Card/Card';
 import './Column.scss';
+import {v4 as uuidv4} from 'uuid';
 
 
 function Column(props) {
@@ -16,6 +17,17 @@ function Column(props) {
     const [titleColumn, setTitleColumn] = useState('');
     const [isFirstClick, setIsFirstClick] = useState(true);
     const inputRef = useRef(null);
+
+    const [isShowAddCard, setIsShowAddCard] = useState(false);
+    const [valueTextArea, setValueTextArea] = useState('');
+    const textAreaRef= useRef(null);
+
+    useEffect(() => {
+        if(isShowAddCard === true && textAreaRef && textAreaRef.current) {
+            textAreaRef.current.focus();
+        }
+    }, [isShowAddCard, textAreaRef]);
+
 
     useEffect(() => {
         if(column && column.title) {
@@ -56,7 +68,7 @@ function Column(props) {
 
     }
 
-    const handleclickOutSide = (event) => {
+    const ClickOutSide = (event) => {
         setIsFirstClick(true);
         const newColumn = {
             ...column,
@@ -66,10 +78,35 @@ function Column(props) {
         onUpdateColumn(newColumn);
     }
 
+    const addNewCard = () => {
+        if(!valueTextArea) {
+            textAreaRef.current.focus();
+            return;
+        }
+
+        const newCard = {
+            id: uuidv4(),
+            boardId: column.boardId,
+            columnId: column.id,
+            title: valueTextArea,
+            image: null,
+        }
+
+        let newColumn = {...column};
+        newColumn.cards = [...newColumn.cards, newCard];
+        newColumn.cardOrder = newColumn.cards.map(card => card.id);
+
+        onUpdateColumn(newColumn);
+        setValueTextArea('');
+        setIsShowAddCard(false);
+
+        console.log('newCard', newCard);
+        console.log('newColumn', newColumn);
+    }
+
     return (
         <>
             <div className="column">
-
                 <header className='column-drag-handle'>
                     <div className=' column-title'>
                         <Form.Control
@@ -80,7 +117,7 @@ function Column(props) {
                             onClick = {selectAllText}
                             onChange = {(e)=>setTitleColumn(e.target.value)}
                             spellCheck="false"
-                            onBlur={handleclickOutSide}
+                            onBlur={ClickOutSide}
                             onMouseDown={(e)=>e.preventDefault()}
                             ref={inputRef}
                         />
@@ -100,33 +137,58 @@ function Column(props) {
                     </div>
                 </header>
 
-                <div className='card-list'>
-                    <Container
-                        groupName='col'
-                        onDrop={(dropResult)=>onCardDrop(dropResult, column.id)}
-                        getChildPayload={index => cards[index]}
-                        dragClass="card-ghost"
-                        dropClass="card-ghost-drop"
-                        dropPlaceholder={{                      
-                        animationDuration: 150,
-                        showOnTop: true,
-                        className: 'card-drop-preview' 
-                        }}
-                        dropPlaceholderAnimationDuration={200}
-                    >
+                    <div className='card-list'>
+                        <Container
+                            groupName='col'
+                            onDrop={(dropResult)=>onCardDrop(dropResult, column.id)}
+                            getChildPayload={index => cards[index]}
+                            dragClass="card-ghost"
+                            dropClass="card-ghost-drop"
+                            dropPlaceholder={{                      
+                            animationDuration: 150,
+                            showOnTop: true,
+                            className: 'card-drop-preview' 
+                            }}
+                            dropPlaceholderAnimationDuration={200}
+                        >
+                            {
+                                cards?.length>0 &&
+                                cards.map((card, index) => {
+                                    return (
+                                        <Draggable key={card.id}>
+                                            <Card card={card} />
+                                        </Draggable>
+                                    )
+                                })
+                            }
+                        </Container>
+
+                        {
+                            isShowAddCard ===true  &&
+                            <div className='add-new-card'>
+                                <div className="form-group">
+                                    <textarea rows='2' className='form-control' placeholder='Enter a title'
+                                        value={valueTextArea}
+                                        ref={textAreaRef}
+                                        onChange={(e)=>setValueTextArea(e.target.value)}
+                                    >
+                                    </textarea>
+                                </div>
+
+                                <div>
+                                    <button onClick={()=> addNewCard()} type="button" className="btn btn-primary mr-4">Add</button>
+                                    <i onClick={()=>setIsShowAddCard(false)} className='fa fa-times'></i>
+                                </div>
+                            </div>
+                        }
+                    </div>
+
                     {
-                        cards?.length>0 &&
-                        cards.map((card, index) => {
-                            return (
-                                <Draggable key={card.id}>
-                                    <Card card={card} />
-                                </Draggable>
-                            )
-                        })
+                        isShowAddCard === false &&
+                        <footer onClick={()=>setIsShowAddCard(true)}> 
+                            <i className='fa fa-plus pr-3'></i> Add another card
+                        </footer>
                     }
-                </Container>
-                </div>
-                <footer>Add another card</footer>
             </div>      
                     
             <ConfirmModal 

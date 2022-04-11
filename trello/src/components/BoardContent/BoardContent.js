@@ -120,32 +120,30 @@ function BoardContent(props) {
                         )
                     })
                 }
-
-                <div className='addTask'>
-                    {
-                        !isShowAddList ?
-                        <div className='add-new-column'>
-                            <button onClick={()=> setIsShowAddList(true)} type="button" className="btn btn-light"> <i className='fa fa-plus'></i> Add another column</button>
-                        </div>
-                        :
-                        <div className='content-add-column pt-2'>
-                            <div className="form-group">
-                                <input type="text" className="form-control" placeholder="" ref={inputRef} 
-                                    value={valueInput}
-                                    onChange={(e)=> setValueInput(e.target.value)}
-                                />
-                            </div>
-
-                            <div>
-                                <button onClick={()=> handleAddList()} type="button" className="btn btn-success mr-4">Add</button>
-                                <i onClick={()=> setIsShowAddList(false)} className='fa fa-times'></i>
-                            </div>
-                        </div>
-
-                    }
-
-                </div>
             </Container>
+
+            <div className='addTask'>
+                {
+                    !isShowAddList ?
+                    <div className='add-new-column'>
+                        <button onClick={()=> setIsShowAddList(true)} type="button" className="btn btn-light"> <i className='fa fa-plus'></i> Add another column</button>
+                    </div>
+                    :
+                    <div className='content-add-column pt-2'>
+                        <div className="form-group">
+                            <input type="text" className="form-control" placeholder="" ref={inputRef} 
+                                value={valueInput}
+                                onChange={(e)=> setValueInput(e.target.value)}
+                            />
+                        </div>
+
+                        <div>
+                            <button onClick={()=> handleAddList()} type="button" className="btn btn-success mr-4">Add</button>
+                            <i onClick={()=> setIsShowAddList(false)} className='fa fa-times'></i>
+                        </div>
+                    </div>
+                }
+            </div>
         </div>
     );
 }
