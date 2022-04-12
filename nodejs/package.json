@@ -1,0 +1,26 @@
+{
+  "name": "nodejs",
+  "version": "1.0.0",
+  "description": "nodejs backend trello",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon  --exec babel-node src/server.js"
+  },
+  "keywords": [
+    "hoang97",
+    "backend",
+    "trello",
+    "app"
+  ],
+  "author": "hoang97",
+  "license": "ISC",
+  "dependencies": {
+    "@babel/core": "7.17.5",
+    "@babel/node": "7.16.8",
+    "@babel/preset-env": "7.16.11",
+    "dotenv": "16.0.0",
+    "express": "4.17.3",
+    "nodemon": "2.0.15"
+  }
+}
