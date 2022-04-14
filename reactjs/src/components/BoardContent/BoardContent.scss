@@ -1,0 +1,34 @@
+@import '../variable.scss';
+
+.board-columns {
+    display: flex;
+    gap: $gap;
+    overflow-x: auto;
+
+    &::-webkit-scrollbar {
+        -webkit-appearance: none;
+    }
+
+    &::-webkit-scrollbar:horizontal {
+        height: 10px;
+        ;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background: rgba(255, 255, 255, 0.24);
+        border-radius: 5px solid $list-bg-color;
+    }
+
+    .column-drop-preview {
+        border: 1px solid rgb(202, 202, 202);
+        margin: 5px
+    }
+
+    .addTask {
+        width: 270px;
+        height: 65px;
+        background: lightblue;
+        margin: 0 10px;
+        padding: 10px;
+    }
+}
