@@ -7,20 +7,21 @@ const client = new MongoClient(url);
 
 // Database Name
 const dbName = process.env.DB_NAME;
+let db;
 
-const connection = async() => {
+const connectDB = async() => {
     try{
-        // Use connect method to connect to the server
         await client.connect();
         console.log('Connected successfully to server');
-        const db = client.db(dbName);
-        const collection = db.collection('documents');
-
-    }catch(err){
-        console.log('connected error to server', err);
+        db = client.db(dbName);
+    }catch(error){
+        console.log('connected error to server', error);
     }finally{
-        client.close();
     }
 }
 
-export default connection;
+const getDB = () => {
+    return db;
+}
+
+module.exports = {connectDB, getDB};
