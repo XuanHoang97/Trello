@@ -1,10 +1,14 @@
 import express from 'express';
 import "dotenv/config";
-import {connectDB, getDB} from './config/connectDB';
-import {createNew} from './models/board';
+import {connectDB} from './config/connectDB';
+import apiRoutes from './routes/api';
+import bodyParser from 'body-parser';
 
 const app = express();
 const port = process.env.PORT || 8080;
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended: true}));
 
 connectDB().then(() => {
     runApp();   
@@ -15,12 +19,10 @@ connectDB().then(() => {
 
 const runApp = () => {
     app.get('/', async(req, res) =>{
-        let fake = {
-            title: 'fake title',
-        }
-        await createNew(fake);
         res.send('Hello World!');
     });
+
+    apiRoutes(app); 
 
     // connection();
 
